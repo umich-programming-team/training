@@ -1,0 +1,59 @@
+---
+id: example-problem
+title: An Example ICPC Problem
+sidebar_label: An Example Problem
+---
+
+Let us look at an example problem called [**Musical Chairs**](https://ecna19.kattis.com/problems/musicalchairs) from a past ECNA contest.
+
+I am now going to describe the problem statement, the input, and the output format.
+If you are interested, please pause the video and follow the link to the problem, and try to solve it first. When you are solving this problem, please note down the estimated (1) thinking time, (2) implementing time, and (3) debugging time.
+
+## Short Description To [Musical Chairs](https://ecna19.kattis.com/problems/musicalchairs)
+
+There are $n$ music faculty lining up.
+Each faculty holds a number $k_i$.
+Starting from the first faculty, setting up $k=k_1$, they count off $k$ members (cycling back to the beginning of the line if necessary) and the $k$-th person steps out of the line.
+Starting from the next person, setting up the $k$ value again and repeat the entire count off process until one faculty member remains. Output the index of this member.
+
+## Sample Solution
+
+One possible idea is to simulate this "count off" process directly.
+If we have all members in a list (or a `queue`), we are able to calculate the next person who will step out using one modular arithmetic operation.
+After we remove this person from the list, we form a shorter list and repeat the process.
+This gives an $O(n^2)$ time algorithm.
+
+### Sample Code
+
+The following 22-line code suffices to get an **Accepted** from the Kattis judge system.
+This code snippet is not highly optimized, and there definitely exists a more efficient algorithm in terms of asymptotic time complexity (say, this problem can be solved in $O(n\log n)$ time.)
+
+However, given the input specification of this problem (i.e., $n \le 10^4$), we chose to implement the simplest possible solution in order to solve this problem as quick as we could.
+
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    queue<pair<int, int>> line;
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        line.push({i+1, x});
+    }
+    while (line.size() > 1) {
+        int k = (line.front().second - 1) % line.size();
+        for(int i = 0; i < k; ++i) {
+            line.push(line.front());
+            line.pop();
+        }
+        line.pop();
+    }
+    cout << line.front().first;
+}
+```
+
+This problem turns out to be the easiest problem in ECNA 2019.
+Solving these problems requires your best knowledge to algorithms, data structures, programming skills, and sometimes math skills. If you find this problem interesting and challenging, please join us and we are happy to welcome you onboard!
