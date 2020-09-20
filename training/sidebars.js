@@ -8,6 +8,7 @@ module.exports = {
     ],
     "Section 1: Sorting and Searching": [
       "01-sorting-and-searching/arrays-and-containers",
+      "01-sorting-and-searching/stl-sort",
     ],
     "Section 2: Divide and Conquer": ["doc2"],
     "Section 3: Recursion and Searching Algorithms": ["doc3"]
