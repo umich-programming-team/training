@@ -1,7 +1,7 @@
 ---
 id: icpc-contests
 title: A Typical ICPC Styled Contest
-sidebar_label: ICPC Contests
+sidebar_label: 0.2 ICPC Contests
 ---
 
 Unlike Code Jam or Hackercup, ICPC is a team competition.

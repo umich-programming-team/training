@@ -1,7 +1,7 @@
 ---
 id: about-icpc
 title: About Competitive Programming and ICPC
-sidebar_label: About ICPC
+sidebar_label: 0.1 About ICPC
 ---
 
 Hi, welcome to UMich Programming Team!
