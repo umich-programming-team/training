@@ -8,14 +8,96 @@ There are many problems (either programming challenges or mathematical pizzles) 
 
 ### Exmaple: [[CF1248B] Grow The Tree](https://codeforces.com/problemset/problem/1248/B)
 
+#### Short Description
+
+You are given $n$ sticks, each of them has length $a_1, a_2, \ldots, a_n$. The goal is to connect all the sticks, with each touching sticks _perpendicular_ to each other, in arbitrary order. What is the longest possible squared Euclidean distance from some stick endpoint to another stick endpoint?
+
+#### Solution
+
+We know that given the constraint, there can only be two perpendicular _directions_ for the sticks. Furthermore, there are exactly $\lfloor n/2\rfloor$ sticks with one direction and $\lceil n/2\rceil$ sticks with another directrion. Thus, our goal is to partition these sticks into two groups.
+
+Let the total length of sticks in group 1 to be $x$ and the total length of the sticks in group2 to be $y$. Then the farthest squared Euclidean distance among the endpoints of the sticks, are ${x^2+y^2}$. Notice that we have total stick length $x+y = \sum_{i=1}^n {a_i}$. In order to maximize this distance, we should make one of $x$ or $y$ as large as possible. Hence, there are at most two possible cases to consider: either $x=a_1+\cdots + a_{\lfloor n/2\rfloor}$ or $x=a_1+\cdots+a_{\lceil n/2\rceil}$. Our algorithm then return one of the larger distance.
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+// Summing up first n elements of a.
+inline long long sum(vector<int> &a, int n) {
+    return accumulate(a.begin(), a.begin() + n, 0);
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    sort(a.begin(), a.end());
+    long long total_sum = sum(a, n);
+
+    // Case 1.
+    long long x1 = sum(a, n/2);
+    long long y1 = total_sum - x1;
+
+    // Case 2.
+    long long x2 = sum(a, (n + 1)/2);
+    long long y2 = total_sum - x2;
+
+    cout << max(x1*x1 + y1*y1, x2*x2 + y2*y2) << endl;
+    return 0;
+}
+```
+
+#### Follow-Up
+
+Actually we do not have to sort the entire array in order to split the values into two groups.
+This is just a selection problem ([wiki](https://en.wikipedia.org/wiki/Selection_algorithm)), so using `std::nth_element()` might help. However, the implementation will become more complex and it is not recommended in competitive programming unless the time constraints are tight.
+
+---
+
 Sometimes you can pass in your custom comparator to the sorting function.
 
 ### Example: [[CF1312B] Bogosort](https://codeforces.com/problemset/problem/1312/B)
 
+#### Shortest Description
+
+You would like to shuffle a given array $[a_1, a_2, \ldots, a_n]$ such that for any $i < j$ we have $i-a_i \neq j-a_j$. Output any valid shuffled array.
+
+#### Solution
+
+If we sorted the array in _decreasing order_, then whenever $i < j$, we have $i-a_i < j-a_i \le j-a_j$. Therefore, we are able to solve the problem by just sorting the array in decreasing order.
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+string array_concat(vector<int>& a) {
+  return accumulate(a.begin(), a.end(), string{},
+                    [&](string& s, int x) -> decltype(auto) {
+                      return s += to_string(x) + " ";
+                    });
+}
+
+void solve() {
+  int n;
+  cin >> n;
+  vector<int> a(n);
+  for (int i = 0; i < n; ++i) cin >> a[i];
+  sort(a.begin(), a.end(), greater<int>());
+  cout << array_concat(a) << endl;
+}
+
+int main() {
+  int T;
+  cin >> T;
+  while (T--) solve();
+  return 0;
+}
+```
+
 ### Example: [[CF1418B] Negative Prefixes](https://codeforces.com/problemset/problem/1418/B)
 
-
------
+---
 
 If we have an sorted array, then searching for a specific key becomes a common and important question. The most common algorithm that searches for a key in a sorted array is through **binary search**.
 However, a correct implementation of a binary search could sometimes become very challenging. Fortunately we have `std::lower_bound()` and `std::upper_bound()` functions provided by C++ standard library.
