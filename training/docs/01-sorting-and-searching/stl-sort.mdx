@@ -6,6 +6,8 @@ sidebar_label: 1.2 STL Sort
 
 There are many problems (either programming challenges or mathematical pizzles) that have an effiecient solution when the data are listed and stored in order. In this subsection, we introduce three ad-hoc simple exmaples where there are elegant solutions with sorting.
 
+## Problems Become Easier To Solve After Sorting
+
 ### Exmaple: [[CF1248B] Grow The Tree](https://codeforces.com/problemset/problem/1248/B)
 
 #### Short Description
@@ -55,6 +57,8 @@ This is just a selection problem ([wiki](https://en.wikipedia.org/wiki/Selection
 
 ---
 
+## Customize Your Sort
+
 Sometimes you can pass in your custom comparator to the sorting function.
 
 ### Example: [[CF1312B] Bogosort](https://codeforces.com/problemset/problem/1312/B)
@@ -67,15 +71,15 @@ You would like to shuffle a given array $[a_1, a_2, \ldots, a_n]$ such that for 
 
 If we sorted the array in _decreasing order_, then whenever $i < j$, we have $i-a_i < j-a_i \le j-a_j$. Therefore, we are able to solve the problem by just sorting the array in decreasing order.
 
-```cpp
+```cpp {18}
 #include <bits/stdc++.h>
 using namespace std;
 
 string array_concat(vector<int>& a) {
   return accumulate(a.begin(), a.end(), string{},
-                    [&](string& s, int x) -> decltype(auto) {
-                      return s += to_string(x) + " ";
-                    });
+    [&](string& s, int x) -> decltype(auto) {
+      return s += to_string(x) + " ";
+    });
 }
 
 void solve() {
@@ -83,6 +87,8 @@ void solve() {
   cin >> n;
   vector<int> a(n);
   for (int i = 0; i < n; ++i) cin >> a[i];
+
+  // Sort the array by overloading the "less than" operator.
   sort(a.begin(), a.end(), greater<int>());
   cout << array_concat(a) << endl;
 }
@@ -95,9 +101,44 @@ int main() {
 }
 ```
 
-### Example: [[CF1418B] Negative Prefixes](https://codeforces.com/problemset/problem/1418/B)
+
+
+### Example: [[CF632C] The Smallest String Concatenation](https://codeforces.com/problemset/problem/632/C)
+
+#### Short Description
+
+You are given a list of $n$ strings $a_1, a_2, \ldots, a_n$. You'd like to concatenate them together in some order such that the resulting string would be lexicographically smallest.
+
+#### Solution
+
+A lexicographically smallest answer corresponds to a _permutation_ of the given $n$ strings.
+If we interchange the neighboring strings on an answer, it shoudn't give us a better concatenated string.
+Hence, we can define our `operator <` on any two strings by testing which order gives a smaller lexicographical order. In fact, we can show that this operator is _transitive_. That is, for any three strings $x, y, z$, as long as $x< y$ and $y< z$ we have $x < z$. The transitivity and the comparability gives us an totol order to the entire sequence, thus we are able to sort all strings using our customized comparator.
+
+```cpp {17}
+#include <bits/stdc++.h>
+using namespace std;
+
+string array_concat(vector<string>& a) {
+  return accumulate(a.begin(), a.end(), string{},
+    [&](string& s, string x) -> decltype(auto) { return s += x; });
+}
+
+int main() {
+  int n;
+  cin >> n;
+  vector<string> a(n);
+  for (int i = 0; i < n; ++i) cin >> a[i];
+
+  // Sort the array by a customized "less than" comparator.
+  sort(a.begin(), a.end(),
+    [](string& x, string& y) { return x + y < y + x; });
+  cout << array_concat(a) << endl;
+  return 0;
+}
+```
 
 ---
 
-If we have an sorted array, then searching for a specific key becomes a common and important question. The most common algorithm that searches for a key in a sorted array is through **binary search**.
+If we have an sorted array, then searching for a specific key arises as a natural and important question. The most common algorithm that searches for a key in a sorted array is through **binary search**.
 However, a correct implementation of a binary search could sometimes become very challenging. Fortunately we have `std::lower_bound()` and `std::upper_bound()` functions provided by C++ standard library.
