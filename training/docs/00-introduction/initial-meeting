@@ -1,7 +1,9 @@
 ---
-id: about-icpc
-title: About Competitive Programming and ICPC
-sidebar_label: 0.1 About ICPC
+id: initial-meeting
+title: Meeting
+sidebar_label: 0.5 Meeting
 ---
+
+test
 
 <embed src="https://sumanbogati.github.io/sample.pdf" type="application/pdf" />
